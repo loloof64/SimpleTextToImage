@@ -36,12 +36,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   fp.Option<Uint8List> _imageData = const fp.None();
+  final _promptController =
+      TextEditingController(text: "Astronaut riding an horse");
+
+  @override
+  void dispose() {
+    _promptController.dispose();
+    super.dispose();
+  }
 
   void _getNewImage() async {
     setState(() {
       _imageData = const fp.None();
     });
-    final data = await generateImage("Astronaut riding a horse").run();
+    final data = await generateImage(_promptController.text).run();
     setState(() {
       _imageData = fp.some(data);
     });
@@ -84,6 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _promptController,
+                    ),
+                  ),
                   IconButton(
                     onPressed: _getNewImage,
                     icon: const Icon(
