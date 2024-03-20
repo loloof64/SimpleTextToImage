@@ -57,7 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _getImageChild() {
     return switch (_imageData) {
-      fp.Some(value: final bytesData) => Image.memory(bytesData),
+      fp.Some(value: final bytesData) => Image.memory(
+          bytesData,
+          width: 500,
+          height: 500,
+        ),
       _ => ContentPlaceholder(
           context: context,
           width: 500,
