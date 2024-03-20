@@ -3,8 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../credentials.dart';
 
 const apiUrl =
-    //"https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5";
-    "https://api-inference.huggingface.co/models/playgroundai/playground-v2.5-1024px-aesthetic";
+    "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5";
 
 Task generateImage(String prompt) {
   final requestResult = makeRequest(prompt);
