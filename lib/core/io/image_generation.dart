@@ -8,7 +8,6 @@ const apiUrl =
 Task generateImage(String prompt) {
   final requestResult = makeRequest(prompt);
   return requestResult.map((data) {
-    print(data.body);
     return data.bodyBytes;
   });
 }
