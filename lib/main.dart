@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_content_placeholder/flutter_content_placeholder.dart';
 import 'package:fpdart/fpdart.dart' as fp;
+import 'package:file_picker/file_picker.dart';
 import './core/io/image_generation.dart';
 
 void main() {
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Simple Text To Image',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -55,6 +58,27 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _purposeSaveToFile() async {
+    if (_imageData.isNone()) return;
+    final String? path =
+        await FilePicker.platform.saveFile(dialogTitle: "Save file as");
+
+    if (path != null) {
+      File file = File(path);
+      await file.writeAsBytes(
+        _imageData.getOrElse(
+          () => Uint8List(1),
+        ),
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('File saved.'),
+        ),
+      );
+    }
+  }
+
   Widget _getImageChild() {
     return switch (_imageData) {
       fp.Some(value: final bytesData) => Image.memory(
@@ -78,6 +102,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: _purposeSaveToFile,
+            icon: const Icon(Icons.save),
+          )
+        ],
       ),
       body: Center(
         child: Column(
